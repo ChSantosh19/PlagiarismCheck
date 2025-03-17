@@ -469,9 +469,67 @@ main {
 footer {
   background-color: var(--white);
   border-top: 1px solid var(--border-color);
-  padding: 1.5rem 0;
-  text-align: center;
+  padding: 2rem 0;
   color: var(--text-light);
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.footer-info {
+  margin-bottom: 1rem;
+}
+
+.contact-section {
+  width: 100%;
+  max-width: 500px;
+}
+
+.contact-section h3 {
+  color: var(--primary);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.contact-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.contact-icon {
+  color: var(--primary);
+}
+
+/* Responsive Design for Footer */
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .contact-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .contact-item {
+    flex: 0 0 auto;
+  }
 }
 
 /* Utility Classes */
