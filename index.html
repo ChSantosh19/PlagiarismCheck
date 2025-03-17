@@ -1,18 +1,106 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>detectify-similarity-scanner</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
-    <meta property="og:image" content="/og-image.png" />
+    <title>Detectify - Similarity Scanner</title>
+    <meta name="description" content="Similarity Scanner & Plagiarism Detection" />
+    <meta name="author" content="Detectify" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
   </head>
 
   <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <header>
+      <div class="container">
+        <h1>Detectify</h1>
+        <p>Similarity Scanner & Plagiarism Detection</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="upload-section">
+        <h2>Upload Files for Comparison</h2>
+        <p>Upload multiple files to check for similarities. Supports text documents, PDFs, and code files.</p>
+        
+        <div class="upload-container" id="drop-area">
+          <div class="upload-prompt">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p>Drag & drop files or <label for="file-input" class="browse-link">browse</label></p>
+            <input type="file" id="file-input" multiple hidden />
+          </div>
+        </div>
+
+        <div id="file-list" class="file-list"></div>
+
+        <div id="error-message" class="error-message hidden"></div>
+
+        <div class="actions">
+          <button id="compare-btn" class="primary-btn" disabled>
+            <span class="button-text">Compare Files</span>
+            <span class="spinner hidden"></span>
+          </button>
+          <button id="clear-btn" class="secondary-btn hidden">Clear All</button>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="results-section" class="hidden">
+        <h2>Comparison Results</h2>
+        <div class="results-table-container">
+          <table id="results-table" class="results-table">
+            <thead>
+              <tr>
+                <th>File 1</th>
+                <th>File 2</th>
+                <th>Similarity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Comparison View Modal -->
+      <div id="comparison-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>File Comparison</h3>
+            <button class="close-modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="comparison-view">
+              <div class="file-column">
+                <div class="file-header" id="file1-header"></div>
+                <div class="file-content" id="file1-content"></div>
+              </div>
+              <div class="file-column">
+                <div class="file-header" id="file2-header"></div>
+                <div class="file-content" id="file2-content"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>Detectify - Similarity Scanner &copy; <span id="current-year"></span></p>
+      </div>
+    </footer>
+
+    <!-- Load Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.0/mammoth.browser.min.js"></script>
+    <script src="fileUtils.js"></script>
+    <script src="similarityProcessor.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>
