@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
   </head>
 
   <body>
     <header>
       <div class="container">
-        <h1>Detectify</h1>
+        <h1 class="site-title">Detectify</h1>
         <p>Similarity Scanner & Plagiarism Detection</p>
       </div>
     </header>
@@ -47,6 +48,84 @@
             <span class="spinner hidden"></span>
           </button>
           <button id="clear-btn" class="secondary-btn hidden">Clear All</button>
+        </div>
+      </div>
+
+      <!-- How to Use Section -->
+      <div class="how-to-use-section">
+        <h2>How to Use Detectify</h2>
+        <p>Follow these simple steps to check your files for similarities and detect potential plagiarism:</p>
+        
+        <div class="steps-container">
+          <div class="step">
+            <div class="step-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <div class="step-content">
+              <h3>Step 1: Upload Files</h3>
+              <p>Drag and drop multiple files to the upload area or click "browse" to select files. Detectify supports PDFs, Word documents, text files, and programming code files.</p>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <div class="step-content">
+              <h3>Step 2: Process and Compare</h3>
+              <p>Click the "Compare Files" button to run our advanced similarity detection algorithms. The system will extract text, normalize content, and perform thorough comparisons between all file pairs.</p>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </div>
+            <div class="step-content">
+              <h3>Step 3: Review Results</h3>
+              <p>Examine the detailed similarity results in our interactive table. For each file pair, you'll see a similarity percentage and can view side-by-side comparisons with highlighted matching sections.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="features">
+          <h3>Key Features</h3>
+          <ul>
+            <li>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Client-side processing - your files never leave your browser</span>
+            </li>
+            <li>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Support for multiple file formats (PDF, DOCX, TXT, code files)</span>
+            </li>
+            <li>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Advanced similarity detection algorithms</span>
+            </li>
+            <li>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Interactive side-by-side comparison with highlighted matches</span>
+            </li>
+          </ul>
         </div>
       </div>
 

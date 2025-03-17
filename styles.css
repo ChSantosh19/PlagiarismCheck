@@ -1,4 +1,3 @@
-
 /* Base Styles */
 :root {
   --primary: #6d28d9;
@@ -33,6 +32,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+  text-align: center;
 }
 
 h1, h2, h3 {
@@ -49,12 +49,16 @@ header {
   background-color: var(--white);
   border-bottom: 1px solid var(--border-color);
   padding: 1.5rem 0;
+  text-align: center;
 }
 
-header h1 {
+.site-title {
   color: var(--primary);
-  font-size: 1.875rem;
+  font-size: 2.25rem;
   margin-bottom: 0.5rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 header p {
@@ -380,6 +384,87 @@ main {
   margin-right: 0.5rem;
 }
 
+/* How to Use Section */
+.how-to-use-section {
+  background-color: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.how-to-use-section h2 {
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.step-icon {
+  color: var(--primary);
+  background-color: rgba(109, 40, 217, 0.1);
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content h3 {
+  color: var(--text-dark);
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.features {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.features h3 {
+  color: var(--text-dark);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.features ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.features li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.features li svg {
+  color: var(--success);
+  flex-shrink: 0;
+}
+
 /* Footer */
 footer {
   background-color: var(--white);
@@ -403,5 +488,19 @@ footer {
   
   .file-content {
     max-height: 300px;
+  }
+  
+  .steps-container {
+    gap: 2rem;
+  }
+  
+  .step {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .features ul {
+    grid-template-columns: 1fr;
   }
 }
