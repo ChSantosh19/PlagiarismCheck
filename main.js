@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // State
   let files = [];
   let results = [];
+  let processingTimeout;
   
   // Event Listeners for Drag and Drop
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -53,6 +54,24 @@ document.addEventListener('DOMContentLoaded', () => {
     dropArea.classList.remove('highlight');
   }
   
+  // Add pulsing animation to drop area periodically
+  function startPulseAnimation() {
+    setTimeout(() => {
+      if (files.length === 0) {
+        dropArea.classList.add('highlight');
+        setTimeout(() => {
+          dropArea.classList.remove('highlight');
+          startPulseAnimation();
+        }, 1500);
+      } else {
+        startPulseAnimation();
+      }
+    }, 5000);
+  }
+  
+  // Start the animation
+  startPulseAnimation();
+  
   // Handle dropped files
   dropArea.addEventListener('drop', handleDrop, false);
   
@@ -73,6 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const newFiles = [];
     
+    // Show loading indicator
+    dropArea.innerHTML = `
+      <div class="upload-prompt">
+        <div class="spinner"></div>
+        <p>Processing files...</p>
+      </div>
+    `;
+    
     for (const file of uploadedFiles) {
       try {
         const content = await extractTextFromFile(file);
@@ -86,9 +113,28 @@ document.addEventListener('DOMContentLoaded', () => {
         
         newFiles.push(fileData);
       } catch (error) {
+        console.error(`Error processing file ${file.name}:`, error);
         showError(`Failed to process file ${file.name}: ${error.message}`);
       }
     }
+    
+    // Reset drop area
+    dropArea.innerHTML = `
+      <div class="upload-prompt">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <p>Drag & drop files or <label for="file-input" class="browse-link">browse</label></p>
+        <input type="file" id="file-input" multiple hidden />
+      </div>
+    `;
+    
+    // Re-attach event listener to file input
+    document.getElementById('file-input').addEventListener('change', function() {
+      handleFiles(this.files);
+    });
     
     // Add new files to state
     files = [...files, ...newFiles];
@@ -97,6 +143,60 @@ document.addEventListener('DOMContentLoaded', () => {
     updateFileList();
     updateButtonState();
     clearError();
+    
+    // Show success animation for each file
+    if (newFiles.length > 0) {
+      showNotification(`Successfully processed ${newFiles.length} file(s)`);
+    }
+  }
+  
+  // Show a notification
+  function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `
+      <div class="notification-content">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span>${message}</span>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Style the notification
+    Object.assign(notification.style, {
+      position: 'fixed',
+      bottom: '20px',
+      right: '20px',
+      backgroundColor: 'var(--success)',
+      color: 'white',
+      padding: '10px 15px',
+      borderRadius: 'var(--radius)',
+      boxShadow: 'var(--shadow)',
+      zIndex: '100',
+      transform: 'translateX(100%)',
+      opacity: '0',
+      transition: 'all 0.3s ease'
+    });
+    
+    // Show notification with animation
+    setTimeout(() => {
+      notification.style.transform = 'translateX(0)';
+      notification.style.opacity = '1';
+    }, 100);
+    
+    // Remove notification after delay
+    setTimeout(() => {
+      notification.style.transform = 'translateX(100%)';
+      notification.style.opacity = '0';
+      
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 3000);
   }
   
   // Update the file list in the UI
@@ -110,16 +210,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     clearBtn.classList.remove('hidden');
     
-    files.forEach(file => {
+    files.forEach((file, index) => {
       const fileItem = document.createElement('div');
       fileItem.className = 'file-item';
+      fileItem.style.animationDelay = `${index * 0.1}s`;
       fileItem.innerHTML = `
         <div class="file-icon">${getFileIcon(file.name)}</div>
         <div class="file-info">
           <div class="file-name">${file.name}</div>
           <div class="file-size">${formatFileSize(file.size)}</div>
         </div>
-        <button class="file-remove" data-id="${file.id}">
+        <button class="file-remove" data-id="${file.id}" title="Remove file">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -141,17 +242,33 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Remove a file from the list
   function removeFile(fileId) {
-    files = files.filter(file => file.id !== fileId);
-    updateFileList();
-    updateButtonState();
+    const fileToRemove = files.find(file => file.id === fileId);
+    const fileElement = document.querySelector(`.file-item .file-remove[data-id="${fileId}"]`).closest('.file-item');
+    
+    // Animate removal
+    fileElement.style.opacity = '0';
+    fileElement.style.transform = 'translateX(20px)';
+    
+    setTimeout(() => {
+      files = files.filter(file => file.id !== fileId);
+      updateFileList();
+      updateButtonState();
+      
+      // Show removal notification
+      if (fileToRemove) {
+        showNotification(`Removed ${fileToRemove.name}`);
+      }
+    }, 300);
   }
   
   // Update the state of the compare button
   function updateButtonState() {
     if (files.length >= 2) {
       compareBtn.disabled = false;
+      compareBtn.classList.add('ready');
     } else {
       compareBtn.disabled = true;
+      compareBtn.classList.remove('ready');
     }
   }
   
@@ -166,6 +283,12 @@ document.addEventListener('DOMContentLoaded', () => {
       ${message}
     `;
     errorMessage.classList.remove('hidden');
+    
+    // Animate error message
+    errorMessage.style.animation = 'none';
+    setTimeout(() => {
+      errorMessage.style.animation = 'slideIn 0.3s ease-out';
+    }, 10);
   }
   
   // Clear error message
@@ -185,29 +308,60 @@ document.addEventListener('DOMContentLoaded', () => {
     setLoading(true);
     clearError();
     
-    try {
-      // Process the comparison
-      results = await compareFiles(files);
+    // Simulate processing steps with visual feedback
+    const totalSteps = 3;
+    let currentStep = 1;
+    
+    buttonText.textContent = `Processing... Step ${currentStep}/${totalSteps}`;
+    
+    // Create a promise to process the comparison
+    const processWithAnimation = async () => {
+      // Step 1: Parsing files
+      await new Promise(resolve => setTimeout(resolve, 800));
+      buttonText.textContent = `Parsing files... Step ${currentStep}/${totalSteps}`;
       
-      // Update UI with results
-      updateResultsTable();
-      resultsSection.classList.remove('hidden');
+      currentStep++;
+      await new Promise(resolve => setTimeout(resolve, 800));
       
-      // Scroll to results section
-      resultsSection.scrollIntoView({ behavior: 'smooth' });
-    } catch (error) {
-      console.error('Error processing files:', error);
-      showError('An error occurred while processing files. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+      // Step 2: Computing similarities
+      buttonText.textContent = `Computing similarities... Step ${currentStep}/${totalSteps}`;
+      
+      try {
+        // Process the comparison
+        results = await compareFiles(files);
+        
+        currentStep++;
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Step 3: Generating report
+        buttonText.textContent = `Generating report... Step ${currentStep}/${totalSteps}`;
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Update UI with results
+        updateResultsTable();
+        resultsSection.classList.remove('hidden');
+        
+        // Scroll to results section
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+        
+        // Show success notification
+        showNotification('Comparison completed successfully!');
+      } catch (error) {
+        console.error('Error processing files:', error);
+        showError('An error occurred while processing files. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    // Start the processing animation
+    processWithAnimation();
   });
   
   // Set loading state
   function setLoading(isLoading) {
     if (isLoading) {
       spinner.classList.remove('hidden');
-      buttonText.textContent = 'Processing...';
       compareBtn.disabled = true;
     } else {
       spinner.classList.add('hidden');
@@ -225,13 +379,20 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
-    results.forEach(result => {
+    // Animate the results section appearance
+    resultsSection.style.animation = 'none';
+    setTimeout(() => {
+      resultsSection.style.animation = 'fadeIn 0.8s ease-out';
+    }, 10);
+    
+    results.forEach((result, index) => {
       const file1 = files.find(f => f.id === result.file1Id);
       const file2 = files.find(f => f.id === result.file2Id);
       
       if (!file1 || !file2) return;
       
       const row = document.createElement('tr');
+      row.style.animationDelay = `${index * 0.1}s`;
       
       const similarityClass = getSimilarityClass(result.similarityPercentage);
       
@@ -299,6 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Render highlighted content
   function renderHighlightedContent(content, matches, isFile1) {
+    if (!content) return '<pre>No content available</pre>';
     if (!matches.length) return `<pre>${escapeHtml(content)}</pre>`;
     
     let lastIndex = 0;
@@ -329,6 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Escape HTML special characters
   function escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
@@ -358,11 +521,24 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Clear all files and results
   clearBtn.addEventListener('click', () => {
-    files = [];
-    results = [];
-    updateFileList();
-    updateButtonState();
-    resultsSection.classList.add('hidden');
-    clearError();
+    // Animate clearing
+    document.querySelectorAll('.file-item').forEach((item, index) => {
+      item.style.transition = 'all 0.3s ease';
+      item.style.transitionDelay = `${index * 0.05}s`;
+      item.style.opacity = '0';
+      item.style.transform = 'translateX(20px)';
+    });
+    
+    setTimeout(() => {
+      files = [];
+      results = [];
+      updateFileList();
+      updateButtonState();
+      resultsSection.classList.add('hidden');
+      clearError();
+      
+      // Show notification
+      showNotification('All files cleared');
+    }, 300);
   });
 });

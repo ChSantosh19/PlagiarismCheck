@@ -1,27 +1,31 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Detectify - Similarity Scanner</title>
-    <meta name="description" content="Similarity Scanner & Plagiarism Detection" />
+    <meta name="description" content="Scan and detect similarities between documents, code files, and text with our advanced similarity detection tool." />
+    <meta name="keywords" content="similarity detector, plagiarism checker, code comparison, text similarity, document scanner" />
     <meta name="author" content="Detectify" />
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap">
+    <!-- Add Animate.css for additional animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   </head>
 
   <body>
     <header>
       <div class="container">
-        <h1 class="site-title">Detectify</h1>
-        <p>Similarity Scanner & Plagiarism Detection</p>
+        <h1 class="site-title animate__animated animate__fadeInDown">Detectify</h1>
+        <p class="animate__animated animate__fadeIn animate__delay-1s">Similarity Scanner & Plagiarism Detection</p>
       </div>
     </header>
 
     <main class="container">
-      <div class="upload-section">
+      <div class="upload-section animate__animated animate__fadeIn animate__delay-1s">
         <h2>Upload Files for Comparison</h2>
         <p>Upload multiple files to check for similarities. Supports text documents, PDFs, and code files.</p>
         
@@ -50,9 +54,9 @@
         </div>
       </div>
 
-      <!-- Results Section - Moved here to be right below upload section -->
+      <!-- Results Section - Right below upload section -->
       <div id="results-section" class="hidden">
-        <h2>Comparison Results</h2>
+        <h2 class="animate__animated animate__fadeIn">Comparison Results</h2>
         <div class="results-table-container">
           <table id="results-table" class="results-table">
             <thead>
@@ -69,12 +73,12 @@
       </div>
 
       <!-- How to Use Section -->
-      <div class="how-to-use-section">
+      <div class="how-to-use-section animate__animated animate__fadeIn">
         <h2>How to Use Detectify</h2>
         <p>Follow these simple steps to check your files for similarities and detect potential plagiarism:</p>
         
         <div class="steps-container">
-          <div class="step">
+          <div class="step animate__animated animate__fadeInLeft animate__delay-1s">
             <div class="step-icon">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -88,7 +92,7 @@
             </div>
           </div>
           
-          <div class="step">
+          <div class="step animate__animated animate__fadeInLeft animate__delay-1s">
             <div class="step-icon">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
@@ -102,7 +106,7 @@
             </div>
           </div>
           
-          <div class="step">
+          <div class="step animate__animated animate__fadeInLeft animate__delay-2s">
             <div class="step-icon">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -115,7 +119,7 @@
           </div>
         </div>
         
-        <div class="features">
+        <div class="features animate__animated animate__fadeIn animate__delay-2s">
           <h3>Key Features</h3>
           <ul>
             <li>
@@ -174,8 +178,9 @@
         <div class="footer-content">
           <div class="footer-info">
             <p>Detectify - Similarity Scanner &copy; <span id="current-year"></span></p>
+            <p class="animate__animated animate__fadeIn">Helping you find similarities across documents with ease</p>
           </div>
-          <div class="contact-section">
+          <div class="contact-section animate__animated animate__fadeIn">
             <h3>Contact Us</h3>
             <div class="contact-items">
               <div class="contact-item">
