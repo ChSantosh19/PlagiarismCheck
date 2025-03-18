@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // State
   let files = [];
   let results = [];
-  let processingTimeout;
   
   // Event Listeners for Drag and Drop
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
