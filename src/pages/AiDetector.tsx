@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, Loader2, Brain, User, FileText, ArrowLeft } from "lucide-react";
+import { AlertCircle, Loader2, Brain, User, FileText, ArrowLeft, BarChart2 } from "lucide-react";
 
 // AI detection features to analyze
 const AI_FEATURES = [
@@ -209,16 +209,22 @@ const AiDetector: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 py-6">
+      <header className="bg-white border-b border-gray-200 py-6 animate-fade-in">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-purple-800">Detectify</h1>
+              <h1 className="text-3xl font-bold text-purple-800 relative">
+                Detectify
+                <span className="absolute -bottom-1 left-0 w-1/2 h-1 bg-gradient-to-r from-purple-600 to-transparent"></span>
+              </h1>
               <p className="text-gray-600 mt-2">AI Text Detection</p>
             </div>
-            <Link to="/" className="flex items-center text-purple-600 hover:text-purple-800 transition-colors">
+            <Link 
+              to="/" 
+              className="flex items-center text-purple-600 hover:text-purple-800 transition-colors hover:scale-105 transform duration-200 bg-purple-50 px-4 py-2 rounded-lg"
+            >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Similarity Scanner
             </Link>
@@ -228,9 +234,12 @@ const AiDetector: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Analyze Text</h2>
-          <p className="text-gray-600 mb-6">
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-8 transition-all duration-300 hover:shadow-xl animate-fade-in">
+          <h2 className="text-xl font-semibold mb-4 flex items-center text-purple-800">
+            <BarChart2 className="h-5 w-5 mr-2 text-purple-600" />
+            Analyze Text
+          </h2>
+          <p className="text-gray-600 mb-6 border-l-4 border-purple-200 pl-3">
             Paste any text below to determine if it was likely written by AI or a human.
           </p>
           
@@ -239,11 +248,11 @@ const AiDetector: React.FC = () => {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Paste your text here (minimum 100 characters recommended for accurate results)"
-              className="h-48"
+              className="h-48 focus:border-purple-300 focus:ring-purple-300"
             />
             
             {error && (
-              <div className="flex items-center p-4 text-red-800 bg-red-50 rounded-md">
+              <div className="flex items-center p-4 text-red-800 bg-red-50 rounded-md border-l-4 border-red-500 animate-fade-in">
                 <AlertCircle className="h-5 w-5 mr-2" />
                 <p>{error}</p>
               </div>
@@ -253,7 +262,7 @@ const AiDetector: React.FC = () => {
               <button
                 onClick={analyzeText}
                 disabled={isAnalyzing || !text.trim()}
-                className="inline-flex items-center px-4 py-2 bg-purple-700 text-white font-medium rounded-md hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-700 to-purple-800 text-white font-medium rounded-md hover:from-purple-800 hover:to-purple-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-1"
               >
                 {isAnalyzing ? (
                   <>
@@ -268,7 +277,7 @@ const AiDetector: React.FC = () => {
               {(text.trim() || result) && (
                 <button
                   onClick={resetAnalysis}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50"
+                  className="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 transition-all duration-300 hover:border-purple-300 hover:text-purple-600"
                 >
                   Reset
                 </button>
@@ -279,8 +288,8 @@ const AiDetector: React.FC = () => {
         
         {/* Results Section */}
         {result && (
-          <div className="bg-white rounded-lg shadow-md p-6 animate-fadeIn">
-            <h2 className="text-xl font-semibold mb-4">Analysis Results</h2>
+          <div className="bg-white rounded-lg shadow-lg p-6 animate-fade-in transition-all duration-300 hover:shadow-xl">
+            <h2 className="text-xl font-semibold mb-4 text-purple-800">Analysis Results</h2>
             
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
@@ -294,12 +303,12 @@ const AiDetector: React.FC = () => {
                 </span>
               </div>
               
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
                 <div 
-                  className={`h-2.5 rounded-full ${
-                    result.score >= 75 ? "bg-red-600" : 
-                    result.score >= 50 ? "bg-yellow-500" : 
-                    "bg-green-600"
+                  className={`h-2.5 rounded-full transition-all duration-1000 ease-out ${
+                    result.score >= 75 ? "bg-gradient-to-r from-red-500 to-red-600" : 
+                    result.score >= 50 ? "bg-gradient-to-r from-yellow-400 to-yellow-500" : 
+                    "bg-gradient-to-r from-green-500 to-green-600"
                   }`}
                   style={{ width: `${result.score}%` }}
                 ></div>
@@ -312,26 +321,26 @@ const AiDetector: React.FC = () => {
             </div>
             
             <div>
-              <h3 className="font-medium mb-3">Analysis Factors</h3>
-              <div className="space-y-2">
+              <h3 className="font-medium mb-3 text-purple-700">Analysis Factors</h3>
+              <div className="space-y-3 transition-all duration-300">
                 {result.features.map((feature, index) => (
-                  <div key={index} className="flex justify-between items-center text-sm">
-                    <span className={feature.present ? "text-purple-700" : "text-gray-600"}>
+                  <div key={index} className="flex justify-between items-center text-sm transition-all duration-300 hover:bg-purple-50 p-2 rounded-md">
+                    <span className={feature.present ? "text-purple-700 font-medium" : "text-gray-600"}>
                       {feature.name}
                     </span>
                     <span className="flex items-center">
-                      <div className="w-16 bg-gray-200 rounded-full h-1.5 mr-2">
+                      <div className="w-20 bg-gray-200 rounded-full h-1.5 mr-2 overflow-hidden">
                         <div 
-                          className={`h-1.5 rounded-full ${feature.present ? "bg-purple-600" : "bg-gray-400"}`}
+                          className={`h-1.5 rounded-full transition-all duration-1000 ease-out ${feature.present ? "bg-purple-600" : "bg-gray-400"}`}
                           style={{ width: `${feature.present ? feature.confidence : 100 - feature.confidence}%` }}
                         ></div>
                       </div>
                       {feature.present ? (
-                        <span className="text-xs font-medium text-purple-700">
+                        <span className="text-xs font-medium text-purple-700 w-8 text-right">
                           {Math.round(feature.confidence)}%
                         </span>
                       ) : (
-                        <span className="text-xs font-medium text-green-700">
+                        <span className="text-xs font-medium text-green-700 w-8 text-right">
                           No
                         </span>
                       )}
@@ -343,7 +352,7 @@ const AiDetector: React.FC = () => {
             
             <div className="mt-6 p-4 bg-gray-50 rounded-md border border-gray-200 text-sm text-gray-600">
               <div className="flex items-start">
-                <FileText className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                <FileText className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0 text-purple-600" />
                 <p>
                   <strong>Disclaimer:</strong> This analysis is based on linguistic patterns and 
                   statistical methods. It provides an indication but is not definitive proof of AI or 
@@ -356,16 +365,16 @@ const AiDetector: React.FC = () => {
         )}
         
         {/* How It Works Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mt-8">
-          <h2 className="text-xl font-semibold mb-4">How It Works</h2>
-          <p className="text-gray-600 mb-4">
+        <div className="bg-white rounded-lg shadow-lg p-6 mt-8 transition-all duration-300 hover:shadow-xl animate-fade-in">
+          <h2 className="text-xl font-semibold mb-4 text-purple-800">How It Works</h2>
+          <p className="text-gray-600 mb-4 border-l-4 border-purple-200 pl-3">
             Our AI text detector analyzes linguistic patterns and statistical features that often differentiate 
             between human and AI-generated content:
           </p>
           
           <div className="grid md:grid-cols-2 gap-4">
             {AI_FEATURES.map((feature, index) => (
-              <div key={index} className="flex items-start">
+              <div key={index} className="flex items-start p-3 rounded-lg transition-all duration-300 hover:bg-purple-50 hover:scale-105 transform">
                 <div className="bg-purple-100 rounded-full p-2 mr-3 flex-shrink-0">
                   <Brain className="h-4 w-4 text-purple-600" />
                 </div>
@@ -386,7 +395,12 @@ const AiDetector: React.FC = () => {
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-6">
         <div className="container mx-auto px-4 text-center text-gray-600">
-          <p>Detectify - AI Text Detection &copy; {new Date().getFullYear()}</p>
+          <p className="animate-fade-in">Detectify - AI Text Detection &copy; {new Date().getFullYear()}</p>
+          <div className="mt-2 flex justify-center space-x-4">
+            <a href="#" className="text-purple-500 hover:text-purple-700 transition-colors">Privacy Policy</a>
+            <a href="#" className="text-purple-500 hover:text-purple-700 transition-colors">Terms of Service</a>
+            <a href="#" className="text-purple-500 hover:text-purple-700 transition-colors">Contact Us</a>
+          </div>
         </div>
       </footer>
     </div>

@@ -5,7 +5,7 @@ import { FileUploader } from "@/components/FileUploader";
 import { ResultsTable } from "@/components/ResultsTable";
 import { SimilarityProcessor } from "@/utils/SimilarityProcessor";
 import { FileData, ComparisonResult } from "@/types/fileTypes";
-import { Loader2, AlertCircle, Brain } from "lucide-react";
+import { Loader2, AlertCircle, Brain, ArrowUpToLine } from "lucide-react";
 
 const Index = () => {
   const [files, setFiles] = useState<FileData[]>([]);
@@ -54,16 +54,22 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 py-6">
+      <header className="bg-white border-b border-gray-200 py-6 animate-fade-in">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-purple-800">Detectify</h1>
+              <h1 className="text-3xl font-bold text-purple-800 relative">
+                Detectify
+                <span className="absolute -bottom-1 left-0 w-1/2 h-1 bg-gradient-to-r from-purple-600 to-transparent"></span>
+              </h1>
               <p className="text-gray-600 mt-2">Similarity Scanner & Plagiarism Detection</p>
             </div>
-            <Link to="/ai-detector" className="flex items-center text-purple-600 hover:text-purple-800 transition-colors">
+            <Link 
+              to="/ai-detector" 
+              className="flex items-center text-purple-600 hover:text-purple-800 transition-colors hover:scale-105 transform duration-200 bg-purple-50 px-4 py-2 rounded-lg"
+            >
               <Brain className="h-5 w-5 mr-2" />
               AI Text Detector
             </Link>
@@ -73,9 +79,12 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Upload Files for Comparison</h2>
-          <p className="text-gray-600 mb-6">
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-8 transition-all duration-300 hover:shadow-xl animate-fade-in">
+          <h2 className="text-xl font-semibold mb-4 flex items-center text-purple-800">
+            <ArrowUpToLine className="h-5 w-5 mr-2 text-purple-600" />
+            Upload Files for Comparison
+          </h2>
+          <p className="text-gray-600 mb-6 border-l-4 border-purple-200 pl-3">
             Upload multiple files to check for similarities. Supports text documents, PDFs, and code files.
           </p>
           
@@ -86,7 +95,7 @@ const Index = () => {
           />
 
           {error && (
-            <div className="flex items-center p-4 mt-4 text-red-800 bg-red-50 rounded-md">
+            <div className="flex items-center p-4 mt-4 text-red-800 bg-red-50 rounded-md border-l-4 border-red-500 animate-fade-in">
               <AlertCircle className="h-5 w-5 mr-2" />
               <p>{error}</p>
             </div>
@@ -96,7 +105,7 @@ const Index = () => {
             <button
               onClick={processFiles}
               disabled={isProcessing || files.length < 2}
-              className="inline-flex items-center px-4 py-2 bg-purple-700 text-white font-medium rounded-md hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-700 to-purple-800 text-white font-medium rounded-md hover:from-purple-800 hover:to-purple-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-1"
             >
               {isProcessing ? (
                 <>
@@ -111,7 +120,7 @@ const Index = () => {
             {files.length > 0 && (
               <button
                 onClick={clearAll}
-                className="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50"
+                className="px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 transition-all duration-300 hover:border-purple-300 hover:text-purple-600"
               >
                 Clear All
               </button>
@@ -126,7 +135,12 @@ const Index = () => {
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-6">
         <div className="container mx-auto px-4 text-center text-gray-600">
-          <p>Detectify - Similarity Scanner &copy; {new Date().getFullYear()}</p>
+          <p className="animate-fade-in">Detectify - Similarity Scanner &copy; {new Date().getFullYear()}</p>
+          <div className="mt-2 flex justify-center space-x-4">
+            <a href="#" className="text-purple-500 hover:text-purple-700 transition-colors">Privacy Policy</a>
+            <a href="#" className="text-purple-500 hover:text-purple-700 transition-colors">Terms of Service</a>
+            <a href="#" className="text-purple-500 hover:text-purple-700 transition-colors">Contact Us</a>
+          </div>
         </div>
       </footer>
     </div>
