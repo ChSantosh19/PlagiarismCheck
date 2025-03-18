@@ -171,6 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Analyze text for AI likelihood
   function analyzeText(text) {
     try {
+      // Get the sentences first to fix the reference error
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      
       // Calculate various linguistic features
       const vocabDiversity = calculateVocabDiversity(text);
       const sentenceVariance = calculateSentenceLengthVariance(text);

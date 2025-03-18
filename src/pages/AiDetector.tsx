@@ -98,6 +98,9 @@ const AiDetector: React.FC = () => {
     // Simulate processing delay
     setTimeout(() => {
       try {
+        // Make sure to define sentences first to prevent reference errors
+        const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+        
         // Calculate various linguistic features
         const vocabDiversity = calculateVocabDiversity(text);
         const sentenceVariance = calculateSentenceLengthVariance(text);
@@ -112,6 +115,16 @@ const AiDetector: React.FC = () => {
         // First person pronouns indicate personal anecdotes
         const firstPersonCount = (text.toLowerCase().match(/\b(i|me|my|mine|myself)\b/g) || []).length;
         const personalAnecdoteScore = firstPersonCount / Math.max(words.length, 1) * 20;
+
+        // Technical term consistency
+        const technicalTerms = /\b(algorithm|data|system|function|process|analysis|framework|methodology|implementation|interface)\b/gi;
+        const techTermMatches = text.match(technicalTerms) || [];
+        const techTermConsistency = techTermMatches.length / Math.max(words.length, 1) * 10;
+        
+        // Predictable transitions
+        const transitions = /\b(however|therefore|furthermore|consequently|thus|moreover|additionally|in conclusion|as a result)\b/gi;
+        const transitionMatches = text.match(transitions) || [];
+        const transitionScore = transitionMatches.length / Math.max(sentences.length, 1);
 
         // Analyze features with confidence scores
         const featureAnalysis = [
@@ -143,7 +156,17 @@ const AiDetector: React.FC = () => {
           { 
             name: "Low presence of filler words", 
             present: fillerWordRatio < 0.01,
-            confidence: (1 - fillerWordRatio * 100) 
+            confidence: Math.max(0, (1 - (fillerWordRatio * 100))) 
+          },
+          {
+            name: "Predictable transitions",
+            present: transitionScore > 0.2,
+            confidence: transitionScore * 100
+          },
+          {
+            name: "Technical term consistency",
+            present: techTermConsistency > 0.3,
+            confidence: techTermConsistency * 100
           }
         ];
         
