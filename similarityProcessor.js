@@ -1,3 +1,4 @@
+
 // Normalization and Similarity Processing
 
 // Normalize code by removing whitespace, comments, etc.
@@ -74,8 +75,14 @@ function levenshteinDistance(str1, str2) {
 
 // Calculate Jaccard similarity between two strings (treating them as sets of words)
 function jaccardSimilarity(str1, str2) {
+  // Guard against empty strings
+  if (!str1 || !str2) return 0;
+  
   const words1 = new Set(str1.toLowerCase().split(/\s+/).filter(Boolean));
   const words2 = new Set(str2.toLowerCase().split(/\s+/).filter(Boolean));
+  
+  // Guard against empty sets
+  if (words1.size === 0 || words2.size === 0) return 0;
   
   const intersection = new Set([...words1].filter(word => words2.has(word)));
   const union = new Set([...words1, ...words2]);
@@ -111,17 +118,25 @@ function isCodeContent(content, fileType) {
 
 // Find matching sections between two texts
 function findMatches(text1, text2, minMatchLength = 20) {
+  // Guard against empty texts
+  if (!text1 || !text2 || typeof text1 !== 'string' || typeof text2 !== 'string') {
+    return [];
+  }
+  
   const matches = [];
   
+  // Use a smaller match length for shorter texts
+  const actualMinLength = Math.min(minMatchLength, Math.floor(Math.min(text1.length, text2.length) / 4) || 5);
+  
   // Simplified algorithm to find common substrings
-  for (let i = 0; i < text1.length - minMatchLength; i++) {
-    const potentialMatch = text1.substring(i, i + minMatchLength);
+  for (let i = 0; i < text1.length - actualMinLength; i++) {
+    const potentialMatch = text1.substring(i, i + actualMinLength);
     let matchIndex = text2.indexOf(potentialMatch);
     
     while (matchIndex !== -1) {
       // Extend the match as far as possible
-      let endPos1 = i + minMatchLength;
-      let endPos2 = matchIndex + minMatchLength;
+      let endPos1 = i + actualMinLength;
+      let endPos2 = matchIndex + actualMinLength;
       
       while (
         endPos1 < text1.length && 
@@ -198,6 +213,16 @@ function filterOverlappingMatches(matches) {
 
 // Calculate similarity percentage based on matches
 function calculateSimilarityPercentage(text1, text2, matches) {
+  // Guard against empty or invalid text
+  if (!text1 || !text2 || typeof text1 !== 'string' || typeof text2 !== 'string') {
+    return 0;
+  }
+  
+  // For identical texts, return 100%
+  if (text1 === text2) {
+    return 100;
+  }
+  
   // Calculate total characters matched
   const totalMatched = matches.reduce((sum, match) => {
     return sum + (match.file1End - match.file1Start);
@@ -223,8 +248,8 @@ async function compareFiles(files) {
       const file1 = files[i];
       const file2 = files[j];
       
-      let content1 = file1.content;
-      let content2 = file2.content;
+      let content1 = file1.content || '';
+      let content2 = file2.content || '';
       
       // If code files, normalize code
       if (isCodeContent(content1, file1.type) || isCodeContent(content2, file2.type)) {
@@ -233,10 +258,10 @@ async function compareFiles(files) {
       }
       
       // Find matching sections
-      const matches = findMatches(file1.content, file2.content);
+      const matches = findMatches(content1, content2);
       
       // Calculate similarity percentage
-      const similarityPercentage = calculateSimilarityPercentage(file1.content, file2.content, matches);
+      const similarityPercentage = calculateSimilarityPercentage(content1, content2, matches);
       
       // Create result
       results.push({

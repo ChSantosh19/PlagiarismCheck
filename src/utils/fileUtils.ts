@@ -44,11 +44,22 @@ async function extractTextFromTextFile(file: File): Promise<string> {
     const reader = new FileReader();
     
     reader.onload = (e) => {
-      const text = e.target?.result as string;
-      resolve(text || '');
+      try {
+        const text = e.target?.result as string;
+        // Make sure we're returning a valid string
+        if (typeof text === 'string') {
+          resolve(text);
+        } else {
+          resolve("");
+        }
+      } catch (err) {
+        console.error("Error reading text content:", err);
+        resolve("");
+      }
     };
     
     reader.onerror = (e) => {
+      console.error("FileReader error:", e);
       reject(new Error('Error reading text file'));
     };
     
@@ -69,10 +80,10 @@ async function extractTextFromPdf(file: File): Promise<string> {
       text += pageText + '\n';
     }
     
-    return text;
+    return text || ""; // Ensure we return a string even if text is empty
   } catch (error) {
     console.error('Error extracting text from PDF:', error);
-    throw new Error('Could not extract text from PDF');
+    return ""; // Return empty string rather than throwing, to allow the app to continue
   }
 }
 
@@ -85,10 +96,10 @@ async function extractTextFromDocx(file: File): Promise<string> {
     
     const arrayBuffer = await file.arrayBuffer();
     const result = await window.mammoth.extractRawText({ arrayBuffer });
-    return result.value;
+    return result.value || "";
   } catch (error) {
     console.error('Error extracting text from DOCX:', error);
-    throw new Error('Could not extract text from DOCX');
+    return ""; // Return empty string rather than throwing
   }
 }
 

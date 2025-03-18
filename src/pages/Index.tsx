@@ -1,10 +1,11 @@
 
 import React, { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { FileUploader } from "@/components/FileUploader";
 import { ResultsTable } from "@/components/ResultsTable";
 import { SimilarityProcessor } from "@/utils/SimilarityProcessor";
 import { FileData, ComparisonResult } from "@/types/fileTypes";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, Brain } from "lucide-react";
 
 const Index = () => {
   const [files, setFiles] = useState<FileData[]>([]);
@@ -57,8 +58,16 @@ const Index = () => {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 py-6">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold text-purple-800">Detectify</h1>
-          <p className="text-gray-600 mt-2">Similarity Scanner & Plagiarism Detection</p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-purple-800">Detectify</h1>
+              <p className="text-gray-600 mt-2">Similarity Scanner & Plagiarism Detection</p>
+            </div>
+            <Link to="/ai-detector" className="flex items-center text-purple-600 hover:text-purple-800 transition-colors">
+              <Brain className="h-5 w-5 mr-2" />
+              AI Text Detector
+            </Link>
+          </div>
         </div>
       </header>
 
